@@ -5,7 +5,7 @@
 </head>
 <body>
 <h1>欢迎来到用户活动界面（修改）</h1>
-<form action="Alter.js" method="post">
+<form  method="post">
 	<table>
 	<tr>
 	<td>用户名：</td>
@@ -13,7 +13,7 @@
 	</tr>
 	<tr>
 	<td>用户ID：</td> 
-	<td><input name="userid" type="text" class="inputtxt" size="50" /></td>
+	<td><input name="userid" type="text" class="inputtxt" size="50" onblur="validate()"/><div id="demo" ></div></td>
 	</tr>
 	<tr>
 	<td>活动内容：</td> 
@@ -28,8 +28,69 @@
 	<td><textarea name="resp" type="text" maxlength="1200" ></textarea></td>
 	</tr>
 	</table>
-	<input type="submit" value="确认提交" ></input>	
+	<button type="button" value="确认提交" onClick="del();">确认提交</button>	
 </form>
 <footer><p><a href="/Index.html">首页</a>Index</p></footer>
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script type = 'text/javascript'>
+function validate()
+   {
+		var userid=document.getElementsByName('userid')[0].value;
+		//alert(document.getElementById('demo').innerHTML);
+		$.ajax({
+				type : "POST",  
+		        url : "ajax.php",
+		        dataType : 'json',  
+		        data : {
+						"userid":userid
+						},        
+					async: true,
+					cache: false,
+		            success: function(data) {
+						//alert(data.tf);
+						if(data.tf=='t')
+				            document.getElementById('demo').innerHTML="真确";
+						else
+							document.getElementById('demo').innerHTML="错误";
+		            },
+			        error:function(){
+						alert("connect fail");
+			        }
+	   });
+		
+   }
+     </script >
+	 <script type = 'text/javascript'>
+	 function del()
+	 {
+	 var userid=document.getElementsByName('userid')[0].value;
+	 var username=document.getElementsByName('username')[0].value;
+	 var actDetail=document.getElementsByName('actDetail')[0].value;
+	 var result=document.getElementsByName('result')[0].value;
+	 var resp=document.getElementsByName('resp')[0].value;
+	 $.ajax({
+				type : "POST",  
+		        url : "alter-ajax.php",
+		        dataType : 'json',  
+		        data : {
+						"userid":userid,
+						"username":username,
+						"actDetail":actDetail,
+						"result":result,
+						"resp":resp,
+						"alter":""
+						},        
+					async: true,
+					cache: false,
+		            success: function(data) {
+						alert("success");
+		            },
+			        error:function(){
+						alert("connect fail");
+			        }
+	   });
+	   }
+	</script >
 </body>
 </html>
